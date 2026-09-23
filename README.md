@@ -51,6 +51,47 @@ npm run smoke    # 往返冒烟测试（Markdown → EPUB → 解析 → TXT/MD/
 
 `vite.config.ts` 中 `base: './'` 使用相对路径，因此无论是根域名还是 `https://<user>.github.io/<repo>/` 子路径都能正常访问。
 
+## 部署到 Cloudflare Pages
+
+两种等价方式，任选其一。本项目是纯静态站点，无需任何后端或 Functions。
+
+### 方式一：控制台连接 Git 仓库（推荐，持续部署）
+
+1. 登录 [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
+2. 授权并选择 `danliren831215/epub-converter` 仓库
+3. 构建配置按下表填写：
+
+| 配置项 | 值 |
+| --- | --- |
+| Framework preset | `Vite` |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Node version | `18` 或更高（环境变量 `NODE_VERSION` = `20`） |
+
+4. 保存并部署。之后每次推送到 `main` 会自动重新构建，`*.pages.dev` 与自定义域名都会更新。
+
+> 注意：`npm run build` 已包含 `tsc --noEmit` 类型检查，类型错误会导致构建失败——这是刻意设计，避免把有问题的代码发布上线。
+
+### 方式二：Wrangler CLI 手动上传（无需连接 Git）
+
+```bash
+npm install          # 已把 wrangler 加入 devDependencies
+npm run cf:login     # 浏览器授权一次，凭证保存在本机
+npm run deploy:cf    # 构建并上传 dist/ 到 Cloudflare Pages
+```
+
+首次部署会提示创建新项目，确认项目名 `epub-converter` 即可，成功后会给出 `https://epub-converter.pages.dev`。
+
+在 CI 或非交互环境中改用 API Token：
+
+```bash
+CLOUDFLARE_API_TOKEN=<你的 token> npx wrangler pages deploy dist --project-name epub-converter
+```
+
+Token 在 Dashboard → **My Profile** → **API Tokens** 创建，模板选 **Edit Cloudflare Workers**，或自建并赋予 `Account.Cloudflare Pages:Edit` 权限。
+
+`wrangler.toml` 中已声明 `pages_build_output_dir = "dist"`，命令行可省略目录参数。
+
 ## 目录结构
 
 ```

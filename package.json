@@ -10,7 +10,10 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "smoke": "esbuild scripts/smoke.ts --bundle --platform=node --format=cjs --external:jsdom --outfile=node_modules/.cache/smoke.cjs --log-level=warning && node node_modules/.cache/smoke.cjs"
+    "smoke": "esbuild scripts/smoke.ts --bundle --platform=node --format=cjs --external:jsdom --outfile=node_modules/.cache/smoke.cjs --log-level=warning && node node_modules/.cache/smoke.cjs",
+    "deploy:cf": "npm run build && wrangler pages deploy dist --project-name epub-converter",
+    "deploy:cf:prod": "npm run build && wrangler pages deploy dist --project-name epub-converter --branch main",
+    "cf:login": "wrangler login"
   },
   "dependencies": {
     "jszip": "^3.10.1",
@@ -25,6 +28,7 @@
     "esbuild": "^0.28.2",
     "jsdom": "^30.1.1",
     "typescript": "^5.5.4",
-    "vite": "^5.4.0"
+    "vite": "^5.4.0",
+    "wrangler": "^4.136.3"
   }
 }

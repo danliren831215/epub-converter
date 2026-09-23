@@ -8,6 +8,8 @@ npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .idea
+.wrangler
+.dev.vars
 .vscode/*
 !.vscode/extensions.json
 *.epub
