@@ -1,0 +1,30 @@
+{
+  "name": "epub-converter",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "纯前端 EPUB 转换工具：EPUB 与 TXT / Markdown / HTML / PDF 互转，无需后端，文件不出本机。",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "smoke": "esbuild scripts/smoke.ts --bundle --platform=node --format=cjs --external:jsdom --outfile=node_modules/.cache/smoke.cjs --log-level=warning && node node_modules/.cache/smoke.cjs"
+  },
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "marked": "^12.0.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "esbuild": "^0.28.2",
+    "jsdom": "^30.1.1",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.0"
+  }
+}
