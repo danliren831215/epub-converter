@@ -1,9 +1,20 @@
 import { useMemo, useRef, useState } from 'react';
 import { buildEpub, splitIntoChapters, type BuildMeta, type SourceKind, type SplitMode } from '../lib/epubWriter';
 import { downloadBlob, safeFileName } from '../lib/utils';
+import {
+  IconAlert,
+  IconBook,
+  IconCheck,
+  IconFileText,
+  IconList,
+  IconSettings,
+  IconSparkle,
+  IconUpload,
+  IconWand,
+} from './icons';
 
 const SPLIT_OPTIONS: { label: string; value: SplitMode }[] = [
-  { label: '自动识别（Markdown 按 ##，文本按章节标题）', value: 'auto' },
+  { label: '自动识别（按出现最多的标题层级）', value: 'auto' },
   { label: '按一级标题 # 分章', value: 'h1' },
   { label: '按二级标题 ## 分章', value: 'h2' },
   { label: '按分隔线 --- 分章', value: 'separator' },
@@ -46,6 +57,8 @@ export default function TextToEpub() {
     [source, kind, splitMode],
   );
 
+  const totalChars = useMemo(() => source.replace(/\s+/g, '').length, [source]);
+
   const setField = <K extends keyof BuildMeta>(key: K, value: string) =>
     setMeta((prev) => ({ ...prev, [key]: value }));
 
@@ -78,27 +91,28 @@ export default function TextToEpub() {
   return (
     <div>
       <div className="card">
-        <h2>正文内容</h2>
+        <div className="card-head">
+          <span className="icon-chip">
+            <IconFileText size={16} />
+          </span>
+          <h2>正文内容</h2>
+        </div>
         <p className="card-note">
           支持 Markdown 或纯文本。可直接粘贴，也可上传 .md / .txt 文件（上传会自动识别类型与书名）。
         </p>
-        <div className="btn-row" style={{ marginTop: 0, marginBottom: 12 }}>
+        <div className="btn-row" style={{ marginBottom: 14 }}>
           <button className="btn" onClick={() => fileInputRef.current?.click()}>
-            上传 .md / .txt 文件
+            <IconUpload size={15} />
+            上传 .md / .txt
           </button>
-          <label className="checkbox">
-            <input
-              type="radio"
-              name="kind"
-              checked={kind === 'markdown'}
-              onChange={() => setKind('markdown')}
-            />
-            Markdown
-          </label>
-          <label className="checkbox">
-            <input type="radio" name="kind" checked={kind === 'text'} onChange={() => setKind('text')} />
-            纯文本
-          </label>
+          <div className="segmented">
+            <button data-active={kind === 'markdown'} onClick={() => setKind('markdown')}>
+              Markdown
+            </button>
+            <button data-active={kind === 'text'} onClick={() => setKind('text')}>
+              纯文本
+            </button>
+          </div>
         </div>
         <input
           ref={fileInputRef}
@@ -117,10 +131,21 @@ export default function TextToEpub() {
           placeholder="在此粘贴正文内容…"
           spellCheck={false}
         />
+        <div className="textarea-meta">
+          <span>识别到 {chapters.length} 章</span>
+          <span>
+            {totalChars.toLocaleString('zh-CN')} 字 · {source.split('\n').length} 行
+          </span>
+        </div>
       </div>
 
       <div className="card">
-        <h2>书籍元数据</h2>
+        <div className="card-head">
+          <span className="icon-chip">
+            <IconSettings size={16} />
+          </span>
+          <h2>书籍元数据</h2>
+        </div>
         <p className="card-note">这些字段会写入 EPUB 的 OPF 元数据，阅读器书架中可见。</p>
         <div className="field-grid">
           <div className="field">
@@ -169,13 +194,18 @@ export default function TextToEpub() {
       </div>
 
       <div className="card">
-        <h2>章节切分预览</h2>
-        <p className="card-note">共识别到 {chapters.length} 章；章节标题会写入 EPUB 导航目录（nav / NCX）。</p>
+        <div className="card-head">
+          <span className="icon-chip">
+            <IconList size={16} />
+          </span>
+          <h2>章节切分预览</h2>
+        </div>
+        <p className="card-note">章节标题会写入 EPUB 导航目录（nav / NCX），可在阅读器中跳转。</p>
         <div className="chapter-list">
           {chapters.length === 0 && <div className="chapter-item">（暂无内容）</div>}
           {chapters.map((c, i) => (
             <div className="chapter-item" key={i}>
-              <span className="chapter-index">{i + 1}.</span>
+              <span className="chapter-index">{i + 1}</span>
               <span>{c.title || `（无标题，共 ${c.body.length} 字）`}</span>
             </div>
           ))}
@@ -183,19 +213,51 @@ export default function TextToEpub() {
       </div>
 
       <div className="card">
-        <h2>生成 EPUB</h2>
+        <div className="card-head">
+          <span className="icon-chip">
+            <IconWand size={16} />
+          </span>
+          <h2>生成 EPUB</h2>
+        </div>
         <p className="card-note">
-          输出标准 EPUB 3.0（含 mimetype、container.xml、nav.xhtml、toc.ncx），兼容 Apple Books、
-          掌阅、Calibre 等主流阅读器。
+          输出标准 EPUB 3.0（含 mimetype、container.xml、nav.xhtml、toc.ncx），兼容 Apple Books、掌阅、
+          Calibre 等主流阅读器。
         </p>
         <div className="btn-row">
-          <button className="btn btn-primary" disabled={busy || !source.trim()} onClick={generate}>
-            {busy && <span className="spinner" />}
+          <button className="btn btn-primary btn-lg" disabled={busy || !source.trim()} onClick={generate}>
+            {busy ? <span className="spinner" /> : <IconSparkle size={16} />}
             {busy ? '正在打包…' : '生成并下载 EPUB'}
           </button>
+          <button className="btn btn-ghost" disabled={busy} onClick={() => setSource('')}>
+            清空正文
+          </button>
         </div>
-        {error && <div className="alert alert-error">{error}</div>}
-        {done && <div className="alert alert-info">{done}</div>}
+        {error && (
+          <div className="alert alert-error">
+            <IconAlert />
+            <span>{error}</span>
+          </div>
+        )}
+        {done && (
+          <div className="alert alert-info">
+            <IconCheck />
+            <span>{done}</span>
+          </div>
+        )}
+        <div className="badge-row" style={{ marginTop: 16 }}>
+          <span className="badge">
+            <IconBook size={13} />
+            EPUB 3.0
+          </span>
+          <span className="badge">
+            <IconBook size={13} />
+            含 nav 与 NCX 双目录
+          </span>
+          <span className="badge">
+            <IconBook size={13} />
+            内置阅读样式表
+          </span>
+        </div>
       </div>
     </div>
   );

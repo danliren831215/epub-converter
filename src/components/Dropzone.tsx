@@ -1,13 +1,15 @@
 import { useRef, useState, type DragEvent } from 'react';
+import { IconUpload } from './icons';
 
 interface DropzoneProps {
   accept: string;
   title: string;
   sub: string;
+  hints?: string[];
   onFile: (file: File) => void;
 }
 
-export default function Dropzone({ accept, title, sub, onFile }: DropzoneProps) {
+export default function Dropzone({ accept, title, sub, hints = [], onFile }: DropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
 
@@ -34,8 +36,18 @@ export default function Dropzone({ accept, title, sub, onFile }: DropzoneProps) 
       onDragLeave={() => setOver(false)}
       onDrop={handleDrop}
     >
+      <div className="dropzone-icon">
+        <IconUpload />
+      </div>
       <div className="dropzone-title">{title}</div>
       <div className="dropzone-sub">{sub}</div>
+      {hints.length > 0 && (
+        <div className="dropzone-hint">
+          {hints.map((h) => (
+            <span key={h}>{h}</span>
+          ))}
+        </div>
+      )}
       <input
         ref={inputRef}
         type="file"
