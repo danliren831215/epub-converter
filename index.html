@@ -6,12 +6,146 @@
     <title>EPUB 转换工具 · 纯前端电子书格式互转</title>
     <meta
       name="description"
-      content="纯前端 EPUB 转换工具：EPUB 转 TXT / Markdown / HTML / PDF，TXT 与 Markdown 生成 EPUB。文件全部在本地浏览器处理，不上传服务器。"
+      content="纯前端 EPUB 转换工具：EPUB 转 TXT / Markdown / HTML / PDF，TXT 与 Markdown 生成 EPUB 3.0。文件全部在本地浏览器处理，不上传服务器，无需注册。"
     />
+    <meta name="keywords" content="EPUB转换,EPUB转TXT,EPUB转Markdown,EPUB转PDF,Markdown转EPUB,电子书格式转换,在线EPUB工具" />
+    <meta name="author" content="danliren831215" />
+    <meta name="theme-color" content="#2f5bd7" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://danliren831215.github.io/epub-converter/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="EPUB 转换工具" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content="EPUB 转换工具 · 纯前端电子书格式互转" />
+    <meta
+      property="og:description"
+      content="EPUB 与 TXT / Markdown / HTML / PDF 双向互转，全程在浏览器内完成，文件不上传服务器。"
+    />
+    <meta property="og:url" content="https://danliren831215.github.io/epub-converter/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EPUB 转换工具 · 纯前端电子书格式互转" />
+    <meta
+      name="twitter:description"
+      content="EPUB 与 TXT / Markdown / HTML / PDF 双向互转，全程在浏览器内完成，文件不上传服务器。"
+    />
+
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%96%3C/text%3E%3C/svg%3E" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "EPUB 转换工具",
+        "alternateName": "EPUB Converter",
+        "url": "https://danliren831215.github.io/epub-converter/",
+        "description": "纯前端电子书格式互转工具，支持 EPUB 转 TXT / Markdown / HTML / PDF，以及 TXT、Markdown 生成 EPUB 3.0，全部在浏览器本地完成。",
+        "applicationCategory": "UtilitiesApplication",
+        "applicationSubCategory": "电子书格式转换",
+        "operatingSystem": "任意（需要现代浏览器）",
+        "browserRequirements": "需要支持 ES2020 与 FileReader 的现代浏览器",
+        "softwareVersion": "1.0.0",
+        "isAccessibleForFree": true,
+        "inLanguage": "zh-CN",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "CNY",
+          "availability": "https://schema.org/InStock"
+        },
+        "featureList": [
+          "EPUB 转 TXT",
+          "EPUB 转 Markdown",
+          "EPUB 转 HTML 单文件",
+          "EPUB 转 PDF（浏览器打印）",
+          "提取 EPUB 插图为 ZIP",
+          "TXT / Markdown 生成 EPUB 3.0"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "danliren831215",
+          "url": "https://github.com/danliren831215"
+        },
+        "codeRepository": "https://github.com/danliren831215/epub-converter",
+        "license": "https://opensource.org/licenses/MIT"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "inLanguage": "zh-CN",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "文件会上传到服务器吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "不会。EPUB 的解压、解析、格式转换与打包全部在你的浏览器内完成，页面关闭后数据即消失，全程不产生任何上传请求。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "支持带 DRM 的电子书吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "不支持。带数字版权保护的文件（如 Adobe DRM、Kindle KFX）无法解析，请先通过合法途径解除保护后再转换。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "生成的 EPUB 兼容哪些阅读器？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "输出标准 EPUB 3.0，包含 mimetype、container.xml、content.opf、nav.xhtml 与 toc.ncx，兼容 Apple Books、掌阅、Calibre、Neat Reader 等主流阅读器。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "转换会丢失排版吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Markdown 导出会保留标题层级、列表、引用、表格、粗斜体、行内代码与链接；固定布局（Fixed Layout）与复杂 MathML、SVG 图表会退化为文本或占位。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Markdown 转 EPUB 时如何分章？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "默认按出现次数最多的标题层级自动判定，也可手动指定按一级标题、二级标题或 --- 分隔线分章，还能整篇作为单章输出。"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="max-width:760px;margin:40px auto;padding:0 20px;font-family:system-ui,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.8;color:#191c20">
+        <h1>EPUB 转换工具 · 纯前端电子书格式互转</h1>
+        <p>
+          这是一个完全在浏览器内运行的电子书格式转换工具：<strong>EPUB 转 TXT、Markdown、HTML 单文件、PDF</strong>，
+          以及<strong>TXT / Markdown 生成标准 EPUB 3.0</strong>。所有解析与打包都在你的设备上完成，文件不会上传到任何服务器，
+          也无需注册或登录。
+        </p>
+        <h2>支持哪些转换</h2>
+        <ul>
+          <li>EPUB → TXT：按 spine 顺序抽取正文，保留段落与章节分隔</li>
+          <li>EPUB → Markdown：保留标题、列表、引用、表格、粗斜体、行内代码与链接，图片可内联为 base64</li>
+          <li>EPUB → HTML：自包含单文件，图片内联，带目录锚点跳转</li>
+          <li>EPUB → PDF：通过浏览器打印对话框导出，目录与章节自动分页</li>
+          <li>提取图片：把 EPUB 内所有插图打包为 ZIP</li>
+          <li>TXT / Markdown → EPUB：自动分章，输出含 mimetype、container.xml、nav.xhtml、toc.ncx 的 EPUB 3.0</li>
+        </ul>
+        <h2>常见问题</h2>
+        <p><strong>文件会上传到服务器吗？</strong>不会。所有处理都在浏览器内完成，页面关闭后数据即消失。</p>
+        <p><strong>支持带 DRM 的电子书吗？</strong>不支持。带数字版权保护的文件无法解析，请先移除 DRM。</p>
+        <p><strong>生成的 EPUB 兼容哪些阅读器？</strong>输出标准 EPUB 3.0，兼容 Apple Books、掌阅、Calibre、Neat Reader 等主流阅读器。</p>
+        <p>本工具不解密、不移除 DRM，请仅转换你拥有合法权利的电子书。需要完整交互功能请启用 JavaScript。</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

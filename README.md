@@ -92,6 +92,35 @@ Token 在 Dashboard → **My Profile** → **API Tokens** 创建，模板选 **E
 
 `wrangler.toml` 中已声明 `pages_build_output_dir = "dist"`，命令行可省略目录参数。
 
+## 搜索引擎收录
+
+构建产物已包含完整的 SEO 基础设施：
+
+- `index.html`：`title`、`description`、`canonical`、Open Graph / Twitter Card 标签，以及两段 JSON-LD（`WebApplication` 与 `FAQPage`）
+- **预渲染**：`npm run prerender` 用 `react-dom/server` 把首屏渲染成静态 HTML 注入 `dist/index.html`。这一步是必需的——纯客户端渲染的 SPA 初始 HTML 是空的，不执行 JS 的爬虫抓不到任何正文
+- `public/robots.txt` 与 `public/sitemap.xml` 会随构建产物一起发布
+- 页面底部有常见问题区（`details` 原生折叠），为爬虫提供可索引的文本内容
+
+客户端入口 `main.tsx` 会检测 `#root` 是否已有内容，有则走 `hydrateRoot` 复用首屏 DOM，没有则退回 `createRoot`，因此开发模式不受影响。`npm run check:hydrate` 会在 jsdom 里校验预渲染 HTML 与客户端渲染是否一致。
+
+### 换域名后重新构建
+
+绑定自定义域名时设置 `SITE_URL`，canonical、og:url、sitemap 与 JSON-LD 里的地址会一次性替换：
+
+```bash
+SITE_URL=https://epub.example.com npm run build
+```
+
+### 提交给搜索引擎
+
+1. **Google**：[Search Console](https://search.google.com/search-console) → 添加「网址前缀」资源 → 用 HTML 文件或 meta 标记验证 → Sitemaps 里提交 `sitemap.xml`
+2. **Bing**：[Webmaster Tools](https://www.bing.com/webmasters) → 可直接从 Google Search Console 导入
+3. **百度**：[搜索资源平台](https://ziyuan.baidu.com) → 添加网站 → 验证后提交链接或用 API 主动推送
+
+收录通常需要几天到两周。Google 与 Bing 能正常收录 `*.github.io`，百度对未备案的境外域名收录较慢。
+
+> 注意：GitHub Pages 的子路径部署无法提供**域根** `robots.txt`（爬虫只认 `https://<host>/robots.txt`）。当前文件位于 `/epub-converter/robots.txt`，仍可在各站长平台手动提交 sitemap。若绑定到自定义域名，这一问题自然消失。
+
 ## 目录结构
 
 ```

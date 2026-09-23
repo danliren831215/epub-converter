@@ -166,6 +166,16 @@ export function IconCopy({ size = 14 }: IconProps) {
   );
 }
 
+export function IconHelp({ size = 16 }: IconProps) {
+  return (
+    <svg {...base(size)}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.6 9.4a2.5 2.5 0 114.1 2.2c-.9.8-1.7 1.2-1.7 2.3" />
+      <path d="M12 17h.01" />
+    </svg>
+  );
+}
+
 export function IconArrowRight({ size = 16 }: IconProps) {
   return (
     <svg {...base(size)}>

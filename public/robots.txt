@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# 单页应用，无后台接口与后台目录需要屏蔽
+Disallow: /assets/*.map
+
+Sitemap: https://danliren831215.github.io/epub-converter/sitemap.xml
